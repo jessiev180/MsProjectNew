@@ -1,0 +1,77 @@
+gitignore# ================================
+# Build 輸出
+# ================================
+bin/
+obj/
+
+# ================================
+# Visual Studio
+# ================================
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.rsuser
+.vscode/
+
+# ================================
+# NuGet 套件
+# ================================
+packages/
+*.nupkg
+*.snupkg
+project.lock.json
+project.fragment.lock.json
+artifacts/
+.nuget/
+
+# ================================
+# 發布輸出
+# ================================
+publish/
+**/publish/
+**/Properties/PublishProfiles/
+
+# ================================
+# 設定檔（含敏感資訊）
+# ================================
+appsettings.Development.json
+appsettings.Production.json
+appsettings.Staging.json
+secrets.json
+*.pfx
+*.key
+*.pem
+**/Properties/launchSettings.json
+
+# ================================
+# Entity Framework / ADO.NET
+# ================================
+*.mdf
+*.ldf
+*.ndf
+
+# ================================
+# 日誌
+# ================================
+*.log
+logs/
+LogFiles/
+
+# ================================
+# 暫存 / 系統檔
+# ================================
+*.tmp
+*.temp
+*.cache
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ================================
+# 部署相關
+# ================================
+*.pubxml
+*.pubxml.user
+web.config.transform
