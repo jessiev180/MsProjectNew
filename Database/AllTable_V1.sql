@@ -2,7 +2,7 @@
 ================================================================
 專案名稱：烘焙平台全站整合腳本.v1
 資料庫名稱：Bake
-模組總計：5 大模組 (Platform, Sales, Servers, Social, User)
+模組總計：5 大模組 (Platform, Sales, Service, Social, User)
 資料表總計：44 張
 ================================================================
 */
@@ -72,7 +72,7 @@ CREATE TABLE [User].[System_Metadata] (
 -- 2. Sales 模組 (商店與電子商務)
 -- =============================================
 
-CREATE TABLE [Sales].[Shop_status] (
+CREATE TABLE [Sales].[Shop_Status] (
     [status_id] TINYINT PRIMARY KEY,
     [status_name] NVARCHAR(20) NOT NULL
 );
@@ -111,12 +111,12 @@ CREATE TABLE [Sales].[Product_Details] (
     CONSTRAINT [FK_Product_Details_Products] FOREIGN KEY([product_id]) REFERENCES [Sales].[Products] ([product_id])
 );
 
-CREATE TABLE [Sales].[cart_status] (
+CREATE TABLE [Sales].[Cart_Status] (
     [status_id] TINYINT PRIMARY KEY,
     [status_name] NVARCHAR(20) NOT NULL
 );
 
-CREATE TABLE [Sales].[cart] (
+CREATE TABLE [Sales].[Cart] (
     [cart_id] INT IDENTITY(1,1) PRIMARY KEY,
     [user_id] INT NOT NULL,
     [status] TINYINT NOT NULL DEFAULT (0),
@@ -126,7 +126,7 @@ CREATE TABLE [Sales].[cart] (
     CONSTRAINT [FK_cart_Status] FOREIGN KEY([status]) REFERENCES [Sales].[cart_status] ([status_id])
 );
 
-CREATE TABLE [Sales].[cartItem] (
+CREATE TABLE [Sales].[CartItem] (
     [cart_item_id] INT IDENTITY(1,1) PRIMARY KEY,
     [cart_id] INT NOT NULL,
     [product_id] INT NOT NULL,
@@ -167,12 +167,12 @@ CREATE TABLE [Sales].[Order_Items] (
     CONSTRAINT [FK_Order_Items_Products] FOREIGN KEY([product_id]) REFERENCES [Sales].[Products] ([product_id])
 );
 
-CREATE TABLE [Sales].[refund_status_definition] (
+CREATE TABLE [Sales].[Refund_Status_Definition] (
     [status_id] TINYINT PRIMARY KEY DEFAULT (0),
     [status_name] NVARCHAR(20) NOT NULL
 );
 
-CREATE TABLE [Sales].[refund] (
+CREATE TABLE [Sales].[Refund] (
     [refund_id] INT IDENTITY(1,1) PRIMARY KEY,
     [order_id] INT NOT NULL,
     [reason] NVARCHAR(500) NULL,
@@ -209,7 +209,7 @@ CREATE TABLE [Social].[Posts] (
     CONSTRAINT [FK_Posts_Type] FOREIGN KEY([type_id]) REFERENCES [Social].[Post_Type_Lookup] ([type_id])
 );
 
-CREATE TABLE [Social].[post_attachments] (
+CREATE TABLE [Social].[Post_Attachments] (
     [image_id] INT IDENTITY(1,1) PRIMARY KEY,
     [post_id] INT NOT NULL,
     [file_url] NVARCHAR(2048) NOT NULL,
@@ -233,7 +233,7 @@ CREATE TABLE [Social].[Post_Tag_Mapping] (
     CONSTRAINT [FK_Mapping_Tag] FOREIGN KEY([tag_id]) REFERENCES [Social].[Tags] ([tag_id]) ON DELETE CASCADE
 );
 
-CREATE TABLE [Social].[post_likes] (
+CREATE TABLE [Social].[Post_Likes] (
     [user_id] INT NOT NULL,
     [post_id] INT NOT NULL,
     PRIMARY KEY ([user_id], [post_id]),
@@ -242,7 +242,7 @@ CREATE TABLE [Social].[post_likes] (
     CONSTRAINT [FK_Likes_Post] FOREIGN KEY([post_id]) REFERENCES [Social].[Posts] ([post_id])
 );
 
-CREATE TABLE [Social].[post_favorites] (
+CREATE TABLE [Social].[Post_Favorites] (
     [user_id] INT NOT NULL,
     [post_id] INT NOT NULL,
     PRIMARY KEY ([user_id], [post_id]),
@@ -270,7 +270,7 @@ CREATE TABLE [Social].[Event_Status_Lookup] (
     [status_name] NVARCHAR(20) NOT NULL
 );
 
-CREATE TABLE [Social].[event_details] (
+CREATE TABLE [Social].[Event_Details] (
     [event_id] INT IDENTITY(1,1) PRIMARY KEY,
     [post_id] INT NULL,
     [event_type_id] TINYINT NOT NULL,
@@ -298,7 +298,7 @@ CREATE TABLE [Social].[Regist_Status_Lookup] (
     [reg_status_name] NVARCHAR(20) NOT NULL
 );
 
-CREATE TABLE [Social].[event_registrations] (
+CREATE TABLE [Social].[Event_Registrations] (
     [registration_id] INT IDENTITY(1,1) PRIMARY KEY,
     [event_id] INT NOT NULL,
     [user_id] INT NOT NULL,
@@ -316,21 +316,21 @@ CREATE TABLE [Social].[event_registrations] (
 -- 4. Service 模組 (通訊、評價與系統通知)
 -- =============================================
 
-CREATE TABLE [Service].[chat_room] (
+CREATE TABLE [Service].[Chat_Room] (
     [room_id] INT IDENTITY(1,1) PRIMARY KEY,
     [created_at] DATETIME2(7) NOT NULL DEFAULT (SYSDATETIME())
 );
 
-CREATE TABLE [Service].[chat_room_member] (
+CREATE TABLE [Service].[Chat_Room_Member] (
     [room_id] INT NOT NULL,
     [user_id] INT NOT NULL,
     PRIMARY KEY ([room_id], [user_id]),
     [joined_at] DATETIME2(7) NOT NULL,
-    CONSTRAINT [FK_Member_Room] FOREIGN KEY([room_id]) REFERENCES [Servers].[chat_room] ([room_id]),
+    CONSTRAINT [FK_Member_Room] FOREIGN KEY([room_id]) REFERENCES [Service].[chat_room] ([room_id]),
     CONSTRAINT [FK_Member_Profile] FOREIGN KEY([user_id]) REFERENCES [User].[User_Profile] ([user_id])
 );
 
-CREATE TABLE [Service].[chat_message] (
+CREATE TABLE [Service].[Chat_Message] (
     [message_id] INT IDENTITY(1,1) PRIMARY KEY,
     [message] NVARCHAR(500) NOT NULL,
     [create_date] DATETIME2(7) NOT NULL DEFAULT (SYSDATETIME()),
@@ -340,7 +340,7 @@ CREATE TABLE [Service].[chat_message] (
     CONSTRAINT [FK_Message_Profile] FOREIGN KEY([sender_id]) REFERENCES [User].[User_Profile] ([user_id])
 );
 
-CREATE TABLE [Service].[product_review] (
+CREATE TABLE [Service].[Product_Review] (
     [review_id] INT IDENTITY(1,1) PRIMARY KEY,
     [product_id] INT NOT NULL,
     [user_id] INT NOT NULL,
@@ -353,12 +353,12 @@ CREATE TABLE [Service].[product_review] (
     CONSTRAINT [CK_Rating_Range] CHECK ([user_rating] >= (1) AND [user_rating] <= (5))
 );
 
-CREATE TABLE [Service].[notify_type] (
+CREATE TABLE [Service].[Notify_Type] (
     [status_id] TINYINT PRIMARY KEY,
     [status_name] NVARCHAR(20) NOT NULL
 );
 
-CREATE TABLE [Service].[system_notify] (
+CREATE TABLE [Service].[System_Notify] (
     [notify_id] INT IDENTITY(1,1) PRIMARY KEY,
     [create_date] DATETIME2(7) NOT NULL DEFAULT (SYSDATETIME()),
     [content_text] NVARCHAR(1000) NOT NULL,

@@ -22,7 +22,7 @@ GO
 -- 2. 建立模組 Schema (邏輯分層)
 IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'Platform') EXEC('CREATE SCHEMA Platform');
 GO
-IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'User') EXEC('CREATE SCHEMA User');
+IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = '[User]') EXEC('CREATE SCHEMA [User]');
 GO
 IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'Sales') EXEC('CREATE SCHEMA Sales');
 GO
